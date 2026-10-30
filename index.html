@@ -3,33 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cure Brainrot — a school quiz instead of endless scrolling</title>
+<title>Cure Brainrot — a Chrome extension that turns short-video time into practice</title>
 <style>
   :root {
-    --bg: #0b1020; --card: #141c33; --line: #22304f; --text: #e8eefc; --muted: #9fb0d0;
-    --blue: #4f8cff; --violet: #6c5cff; --green: #35d39a;
+    --bg: #0b1020;
+    --card: #141c33;
+    --line: #22304f;
+    --text: #e8eefc;
+    --muted: #9fb0d0;
+    --blue: #4f8cff;
+    --violet: #6c5cff;
+    --green: #35d39a;
+    --red: #ff6b81;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: radial-gradient(1200px 600px at 20% -10%, #1b2650 0%, var(--bg) 60%);
-    color: var(--text); font: 17px/1.6 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-  main { max-width: 880px; margin: 0 auto; padding: 44px 22px 72px; }
-  .kicker { color: var(--green); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 10px; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 20% -10%, #1b2650 0%, var(--bg) 60%);
+    color: var(--text);
+    font: 17px/1.6 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 48px 22px 72px; }
+  .kicker { color: var(--green); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 8px; }
   h1 { font-size: 40px; line-height: 1.15; margin: 0 0 12px; }
   h2 { font-size: 22px; margin: 44px 0 12px; }
   p { margin: 0 0 14px; }
   .lead { font-size: 19px; color: #cfdcf5; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin: 18px 0; }
   .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .btn { display: inline-block; padding: 13px 22px; border-radius: 12px; text-decoration: none;
-    background: linear-gradient(135deg, var(--blue), var(--violet)); color: #fff; font-weight: 650; }
+  .btn {
+    display: inline-block; padding: 13px 22px; border-radius: 12px; text-decoration: none;
+    background: linear-gradient(135deg, var(--blue), var(--violet)); color: #fff; font-weight: 650;
+  }
   .btn.ghost { background: none; border: 1px solid var(--line); color: var(--text); font-weight: 500; }
   .muted { color: var(--muted); font-size: 15px; }
-  .shot { width: 100%; border-radius: 14px; border: 1px solid var(--line); display: block; }
-  .teaser { width: 100%; border-radius: 16px; border: 1px solid var(--line); display: block; margin: 6px 0 10px; }
   table { width: 100%; border-collapse: collapse; margin: 6px 0 0; }
   th, td { text-align: left; padding: 11px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { color: var(--muted); font-weight: 600; font-size: 14px; }
-  td.num { white-space: nowrap; color: #fff; font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; color: #fff; font-weight: 600; }
+  .ok { color: var(--green); }
+  .no { color: var(--red); }
   ol.steps { padding-left: 22px; }
   ol.steps li { margin-bottom: 8px; }
   code { background: #0e1730; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; font-size: 15px; }
@@ -41,49 +54,37 @@
 <main>
   <p class="kicker">FRP 2026 · AI Engineering · ISSAI, Nazarbayev University</p>
   <h1>Cure Brainrot</h1>
-  <p class="lead">A Chrome extension that closes TikTok, YouTube Shorts and Instagram Reels after a daily limit,
-  and opens a short school quiz on your own subjects instead. 8 of 10 right answers give 20 more minutes.</p>
-
-  <img class="teaser" src="images/teaser.jpg" alt="Three phone screens: the daily result, the quiz and the score">
+  <p class="lead">A Chrome extension that gives back the evening: it closes TikTok, YouTube Shorts and Instagram Reels
+  after a daily limit, and only a short school quiz unlocks 20 more minutes.</p>
 
   <div class="row">
-    <a class="btn" href="cure-brainrot-2.6.zip" download>Download the extension</a>
+    <a class="btn" href="cure-brainrot-2.6.zip" download>Download the extension (22.6 KB)</a>
     <a class="btn ghost" href="Can_a_school_quiz_interrupt_doomscrolling_.pdf">Read the paper</a>
   </div>
 
   <h2>The problem</h2>
-  <p>Short videos eat hours without anyone noticing. My classmates and I open TikTok, YouTube Shorts or Instagram
-  Reels "for five minutes" and lose an evening; after that it is harder to start homework or go to sleep. It is not
-  only about time: after a long scroll the brain is tired and little was learned. Screen-time limits only stop the
-  video — they do not give anything back.</p>
+  <p>Short videos eat hours without anyone noticing. Screen-time limits only stop the video; they do not give
+  anything back. Every time you open TikTok, Shorts or Reels "for five minutes", the feed is built to keep you:
+  endless scroll, autoplay, no stopping point.</p>
 
-  <h2>How it works</h2>
-  <ol class="steps">
-    <li>The first time, the quiz asks your language (English, Russian or Kazakh), your grade (5, 6 or 7) and the
-    subjects you want to study: Math, Science and Social Studies; Language is the fourth subject when there is time.</li>
-    <li>The extension counts the time on the three short-video sites. When the daily limit is used up, it closes
-    those tabs.</li>
-    <li>A quiz of 10 questions, at your grade and in the chosen language, comes first. The AI writes the questions;
-    without an AI key the built-in questions are used.</li>
-    <li>8 of 10 right answers open 20 more minutes. The wrong topics go on a "to do" list and the next quiz starts
-    with your weakest subject.</li>
-  </ol>
+  <h2>What we built</h2>
+  <p>When the daily short-video limit is used up, the extension closes those tabs and opens a 10-question quiz on
+  your own subjects. 8 of 10 right answers give 20 extra minutes; a failed quiz keeps the sites closed for
+  5 minutes. A popup shows the time left and a one-line daily result you can copy.</p>
 
-  <h2>What it looks like</h2>
-  <img class="shot" src="images/demo.jpg" alt="The popup with time left, the daily line and Copy my result; the quiz with one question and four answers">
-  <p class="muted">Real screens of version 2.6: the popup with the time left and the daily line, and the quiz with
-  one question of 10.</p>
-
-  <h2>Numbers from the project</h2>
+  <h2>Numbers we measured</h2>
+  <p class="muted">From our own test runs with a shortened limit of 1 minute and a fake clock, so a whole day is
+  checked in a few seconds. They describe the extension, not classmates.</p>
   <table>
-    <tr><th>What</th><th>Our number</th></tr>
-    <tr><td>Daily limit of short videos (can be changed in the popup)</td><td class="num">20 minutes</td></tr>
-    <tr><td>Questions in one quiz</td><td class="num">10</td></tr>
-    <tr><td>Right answers needed to pass</td><td class="num">8 of 10</td></tr>
-    <tr><td>Extra time after a passed quiz</td><td class="num">20 minutes</td></tr>
-    <tr><td>Short-video sites the extension closes</td><td class="num">3</td></tr>
-    <tr><td>Languages on the screen</td><td class="num">3</td></tr>
-    <tr><td>Grades of the questions</td><td class="num">5, 6, 7</td></tr>
+    <tr><th>What we checked</th><th>Result</th></tr>
+    <tr><td>Tab closes after the limit</td><td class="num ok">66 s (limit 1 min)</td></tr>
+    <tr><td>Passing quiz, answers needed</td><td class="num">8 of 10</td></tr>
+    <tr><td>Extra time after a pass</td><td class="num ok">+20 min (1 200 s)</td></tr>
+    <tr><td>Wait after a failed quiz</td><td class="num no">5 min (300 s)</td></tr>
+    <tr><td>Countdown on the quiz page</td><td class="num">4:57 → 0:00, then buttons return</td></tr>
+    <tr><td>Popup "Today" after one failed and one passed quiz</td><td class="num">1 min · 2 tabs closed · quizzes 2 (passed 1) · right 12/20</td></tr>
+    <tr><td>AI-written quiz questions checked by hand</td><td class="num">30</td></tr>
+    <tr><td>Extension size (8 files, version 2.6)</td><td class="num">22.6 KB</td></tr>
   </table>
 
   <h2>Install (2 minutes)</h2>
@@ -94,19 +95,19 @@
       <li>Open <code>chrome://extensions</code> in Chrome.</li>
       <li>Turn on <strong>Developer mode</strong> (top right).</li>
       <li>Click <strong>Load unpacked</strong> and choose the unzipped folder.</li>
-      <li>Click the puzzle piece → <strong>Cure Brainrot</strong>; set your name and your daily limit.</li>
+      <li>Click the puzzle piece → <strong>Cure Brainrot</strong>; set your limit and your name.</li>
     </ol>
-    <p class="muted">Works in Chrome and other Chromium browsers such as Edge.</p>
+    <p class="muted">Works in Chrome (other Chromium browsers such as Edge work the same way).</p>
   </div>
 
   <h2>The AI key is optional</h2>
-  <p>Without a key you get built-in school questions, so the quiz always works. With your own key the questions are
-  written by the AI in the subjects you picked. The key is saved only on your computer, and the daily line you copy
-  never leaves it.</p>
+  <p>Without a key you get built-in math and school questions, so the quiz always works. With your own key the
+  questions are written by the AI in your chosen subjects. The key is saved only on your computer and the copied
+  daily line never leaves it.</p>
 
   <footer>
-    FRP 2026, AI Engineering track, ISSAI, Nazarbayev University. Code:
-    <a href="https://github.com/ajsa35792-byte/cure-brainrot">github.com/ajsa35792-byte/cure-brainrot</a>.
+    Made by Aisha Nurekeyeva and Amina Karymova, FRP 2026, AI Engineering track, ISSAI, Nazarbayev University.
+    Code: <a href="https://github.com/ajsa35792-byte/cure-brainrot">github.com/ajsa35792-byte/cure-brainrot</a>.
   </footer>
 </main>
 </body>
